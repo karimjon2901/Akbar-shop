@@ -9,4 +9,7 @@ public interface ContactService {
     ResponseDto<ContactDto> add(ContactDto contactDto);
 
     ResponseDto<List<ContactDto>> getAll();
+    ResponseDto<ContactDto> update(ContactDto contactDto);
+    ResponseDto<?> delete(Integer id);
+    ResponseDto<?> getById(Integer id);
 }

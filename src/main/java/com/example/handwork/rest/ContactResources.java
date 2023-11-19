@@ -27,4 +27,18 @@ public class ContactResources {
     public ResponseDto<List<ContactDto>> getAll(){
         return service.getAll();
     }
+
+    @PutMapping
+    public ResponseDto<ContactDto> update(@RequestBody ContactDto contactDto){
+        return service.update(contactDto);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseDto<?> getById(@PathVariable Integer id){
+        return service.getById(id);
+    }
+    @DeleteMapping("{/id}")
+    public ResponseDto<?> delete(@PathVariable Integer id){
+        return service.delete(id);
+    }
 }

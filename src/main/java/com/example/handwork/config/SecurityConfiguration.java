@@ -66,8 +66,6 @@ public class SecurityConfiguration {
                 .requestMatchers(HttpMethod.GET,"/images/**").permitAll()
                 .requestMatchers("/v3/api-docs.yaml", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 .requestMatchers("/login").permitAll()
-                .requestMatchers(HttpMethod.POST,"/is-online-or-offline-user-information/**").permitAll()
-                .requestMatchers(HttpMethod.POST,"/is-online-or-offline-user-information").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()

@@ -20,9 +20,11 @@ public class Contact {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String location;
+    private String firstName;
+    private String lastName;
     private String phoneNumber;
     private String email;
+    private String message;
     @CreatedDate
     private LocalDateTime createdAt;
 }
