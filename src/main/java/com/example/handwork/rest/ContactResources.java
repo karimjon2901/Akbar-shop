@@ -37,7 +37,7 @@ public class ContactResources {
     public ResponseDto<?> getById(@PathVariable Integer id){
         return service.getById(id);
     }
-    @DeleteMapping("{/id}")
+    @DeleteMapping("/{id}")
     public ResponseDto<?> delete(@PathVariable Integer id){
         return service.delete(id);
     }
