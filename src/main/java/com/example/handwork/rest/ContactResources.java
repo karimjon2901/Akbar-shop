@@ -22,7 +22,6 @@ public class ContactResources {
         return service.add(contactDto);
     }
 
-    @SecurityRequirement(name = "Authorization")
     @GetMapping
     public ResponseDto<List<ContactDto>> getAll(){
         return service.getAll();
