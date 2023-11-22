@@ -17,11 +17,7 @@ public class CategoryDto {
     private Integer id;
     private CategoryDto parentId;
     @NotNull(message = AppStatusMessage.NULL_VALUE)
-    @NotEmpty(message = AppStatusMessage.EMPTY_STRING)
-    @Size(min = 1,max = 255,message = AppStatusMessage.SIZE_MISMATCH)
     private TranslatorDto name;
     @NotNull(message = AppStatusMessage.NULL_VALUE)
-    @NotEmpty(message = AppStatusMessage.EMPTY_STRING)
-    @Size(min = 1,max = 255,message = AppStatusMessage.SIZE_MISMATCH)
     private TranslatorDto description;
 }

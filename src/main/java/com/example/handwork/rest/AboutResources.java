@@ -25,7 +25,7 @@ public class AboutResources {
             summary = "Update"
     )
     @PostMapping
-    public ResponseDto<AboutDto> update( @RequestBody AboutDto aboutDto){
+    public ResponseDto<AboutDto> update(@Valid @RequestBody AboutDto aboutDto){
         return aboutService.update(aboutDto);
     }
 

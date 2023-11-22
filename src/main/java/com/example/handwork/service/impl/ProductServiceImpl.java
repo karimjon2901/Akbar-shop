@@ -1,19 +1,22 @@
 package com.example.handwork.service.impl;
 
+import com.example.handwork.config.S3File;
+import com.example.handwork.dto.ProductDto;
+import com.example.handwork.dto.ProductInputDto;
+import com.example.handwork.dto.ResponseDto;
+import com.example.handwork.entity.Product;
+import com.example.handwork.repository.CategoryRepository;
+import com.example.handwork.repository.ProductRepository;
+import com.example.handwork.service.ProductService;
+import com.example.handwork.service.mapper.ProductMapper;
 import com.example.handwork.service.mapper.TranslatorMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import com.example.handwork.dto.ProductDto;
-import com.example.handwork.dto.ResponseDto;
-import com.example.handwork.entity.Product;
-import com.example.handwork.repository.ProductRepository;
-import com.example.handwork.service.ProductService;
-import com.example.handwork.service.mapper.CategoryMapper;
-import com.example.handwork.service.mapper.ProductMapper;
 
 import java.util.Optional;
+
 import static com.example.handwork.status.AppStatusMessage.*;
 
 @Service
@@ -22,19 +25,29 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
-    private final CategoryMapper categoryMapper;
     private final TranslatorMapper translatorMapper;
+    private final CategoryRepository categoryRepository;
+    private final S3File s3File;
 
     @Override
-    public ResponseDto<ProductDto> addProduct(ProductDto productDto) {
-        Product product = productMapper.toEntity(productDto);
-        try{
+    public ResponseDto<ProductDto> addProduct(ProductInputDto productInputDto) {
+        try {
+            Product product = new Product();
+
+
+            product.setCategory(categoryRepository.findById(productInputDto.getCategory()).get());
+            product.setImage(s3File.postFile(productInputDto.getImage()));
+            product.setDescription(translatorMapper.toEntity(productInputDto.getDescription()));
+            product.setAmount(productInputDto.getAmount());
+            product.setName(translatorMapper.toEntity(productInputDto.getName()));
+            product.setPrice(productInputDto.getPrice());
+
             productRepository.save(product);
 
             return ResponseDto.<ProductDto>builder()
+                    .message(OK)
                     .success(true)
                     .data(productMapper.toDto(product))
-                    .message(OK)
                     .build();
         } catch (Exception e){
             return ResponseDto.<ProductDto>builder()
@@ -45,46 +58,39 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ResponseDto<ProductDto> updateProduct(ProductDto productDto) {
-        if (productDto.getId() == null) {
+    public ResponseDto<ProductDto> updateProduct(ProductInputDto productInputDto) {
+        if (productInputDto.getId() == null) {
             return ResponseDto.<ProductDto>builder()
                     .message(NULL_ID)
                     .build();
         }
         try {
-            Optional<Product> optional = productRepository.findById(productDto.getId());
+            Optional<Product> byId = productRepository.findById(productInputDto.getId());
 
-            if (optional.isEmpty()) {
+            if (byId.isEmpty()){
                 return ResponseDto.<ProductDto>builder()
                         .message(NOT_FOUND)
                         .build();
             }
 
-            Product product = optional.get();
+            Product product = byId.get();
 
-            if (productDto.getName() != null) {
-                product.setName(translatorMapper.toEntity(productDto.getName()));
+            if (productInputDto.getImage() != null){
+                product.setImage(s3File.postFile(productInputDto.getImage()));
             }
-            if (productDto.getPrice() != null) {
-                product.setPrice(productDto.getPrice());
-            }
-            if (productDto.getAmount() != null && productDto.getAmount() > 0) {
-                product.setIsAvailable(true);
-                product.setAmount(productDto.getAmount());
-            }
-            if (productDto.getDescription() != null) {
-                product.setDescription(translatorMapper.toEntity(productDto.getDescription()));
-            }
-            if(productDto.getCategory() != null) {
-                product.setCategory(categoryMapper.toEntity(productDto.getCategory()));
-            }
+
+            product.setName(productInputDto.getName() != null ? translatorMapper.toEntity(productInputDto.getName()) : product.getName());
+            product.setDescription(productInputDto.getDescription() != null ? translatorMapper.toEntity(productInputDto.getDescription()) : product.getDescription());
+            product.setAmount(productInputDto.getAmount() != null ? productInputDto.getAmount() : product.getAmount());
+            product.setCategory(productInputDto.getCategory() != null ? categoryRepository.findById(productInputDto.getId()).get() : product.getCategory());
+            product.setPrice(productInputDto.getPrice() != null ? productInputDto.getPrice() : product.getPrice());
 
             productRepository.save(product);
 
             return ResponseDto.<ProductDto>builder()
                     .message(OK)
-                    .data(productMapper.toDto(product))
                     .success(true)
+                    .data(productMapper.toDto(product))
                     .build();
         } catch (Exception e) {
             return ResponseDto.<ProductDto>builder()
@@ -126,5 +132,35 @@ public class ProductServiceImpl implements ProductService {
                         .message(NOT_FOUND)
                         .build()
                 );
+    }
+
+    @Override
+    public ResponseDto<ProductDto> delete(Integer id) {
+        if (id == null){
+            return ResponseDto.<ProductDto>builder()
+                    .message(NULL_ID)
+                    .build();
+        }
+        try {
+            Optional<Product> byId = productRepository.findById(id);
+
+            if (byId.isEmpty()){
+                return ResponseDto.<ProductDto>builder()
+                        .message(NOT_FOUND)
+                        .build();
+            }
+
+            productRepository.deleteById(id);
+
+            return ResponseDto.<ProductDto>builder()
+                    .message(OK)
+                    .success(true)
+                    .data(productMapper.toDto(byId.get()))
+                    .build();
+        } catch (Exception e){
+            return ResponseDto.<ProductDto>builder()
+                    .message(DATABASE_ERROR + " : " + e.getMessage())
+                    .build();
+        }
     }
 }

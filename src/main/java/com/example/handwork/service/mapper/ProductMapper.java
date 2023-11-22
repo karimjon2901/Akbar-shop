@@ -12,6 +12,9 @@ public abstract class ProductMapper implements CommonMapper<ProductDto, Product>
     @Autowired
     protected CategoryMapper categoryMapper;
 
-    @Mapping(target = "category", expression = "java(categoryMapper.toDto(product.getCategory()))")
+    @Override
     public abstract ProductDto toDto(Product product);
+
+    @Override
+    public abstract Product toEntity(ProductDto productDto);
 }

@@ -18,6 +18,7 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    private String image;
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private Translator name;
     private Double price;

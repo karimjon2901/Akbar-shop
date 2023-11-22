@@ -25,7 +25,6 @@ public class CategoryResources {
                     content = @Content(mediaType = "application/json")),
             summary = "add"
     )
-    @SecurityRequirement(name = "Authorization")
     @PostMapping
     public ResponseDto<CategoryDto> add(@Valid @RequestBody CategoryDto categoryDto){
         return categoryService.addCategory(categoryDto);
@@ -61,7 +60,6 @@ public class CategoryResources {
                     content = @Content(mediaType = "application/json")),
             summary = "Delete"
     )
-    @SecurityRequirement(name = "Authorization")
     @DeleteMapping("/{id}")
     public ResponseDto<Void> delete(@PathVariable Integer id){
         return categoryService.delete(id);
@@ -74,7 +72,6 @@ public class CategoryResources {
                     content = @Content(mediaType = "application/json")),
             summary = "Update"
     )
-    @SecurityRequirement(name = "Authorization")
     @PatchMapping
     public ResponseDto<CategoryDto> update(@Valid @RequestBody CategoryDto categoryDto){
         return categoryService.update(categoryDto);
