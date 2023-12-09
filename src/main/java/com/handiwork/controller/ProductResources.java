@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import com.handiwork.dto.ProductDto;
 import com.handiwork.dto.ResponseDto;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/product")
 @RequiredArgsConstructor
@@ -76,6 +78,11 @@ public class ProductResources {
     @DeleteMapping("/{id}")
     public ResponseDto<ProductDto> delete(@PathVariable String id){
         return productService.delete(id);
+    }
+
+    @GetMapping
+    public ResponseDto<List<ProductDto>> getAll(){
+        return productService.getAll();
     }
 
 }

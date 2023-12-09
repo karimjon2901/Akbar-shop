@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.handiwork.status.AppStatusMessage.*;
@@ -145,6 +146,21 @@ public class ProductServiceImpl implements ProductService {
                     .build();
         } catch (Exception e){
             return ResponseDto.<ProductDto>builder()
+                    .message(DATABASE_ERROR + " : " + e.getMessage())
+                    .build();
+        }
+    }
+
+    @Override
+    public ResponseDto<List<ProductDto>> getAll() {
+        try {
+            return ResponseDto.<List<ProductDto>>builder()
+                    .message(OK)
+                    .success(true)
+                    .data(productRepository.findAll().stream().map(productMapper::toDto).toList())
+                    .build();
+        } catch (Exception e){
+            return ResponseDto.<List<ProductDto>>builder()
                     .message(DATABASE_ERROR + " : " + e.getMessage())
                     .build();
         }

@@ -21,13 +21,10 @@ import java.time.LocalDateTime;
 public class Category {
     @Id
     private String id;
-    @OneToOne
-    private Category parentId;
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private Translator name;
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private Translator description;
-    @CreatedDate
     @CreationTimestamp
     private LocalDateTime createdAt;
 }

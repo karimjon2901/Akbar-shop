@@ -13,7 +13,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class CategoryDto {
     private String id;
-    private CategoryDto parentId;
     @NotNull(message = AppStatusMessage.NULL_VALUE)
     private TranslatorDto name;
     @NotNull(message = AppStatusMessage.NULL_VALUE)

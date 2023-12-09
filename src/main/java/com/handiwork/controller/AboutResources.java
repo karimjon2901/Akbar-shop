@@ -1,12 +1,10 @@
 package com.handiwork.controller;
 
-
-import com.handiwork.dto.ResponseDto;
 import com.handiwork.dto.AboutDto;
+import com.handiwork.dto.ResponseDto;
 import com.handiwork.service.AboutService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AboutResources {
     private final AboutService aboutService;
-    @SecurityRequirement(name = "Authorization")
     @Operation(
             method = "Update about of school",
             description = "Need to send AboutOfSchoolDto to this endpoint to update",

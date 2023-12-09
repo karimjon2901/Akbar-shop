@@ -4,6 +4,8 @@ import com.handiwork.dto.ResponseDto;
 import org.springframework.data.domain.Page;
 import com.handiwork.dto.ProductDto;
 
+import java.util.List;
+
 public interface ProductService {
     ResponseDto<ProductDto> addProduct(ProductDto productDto);
     ResponseDto<ProductDto> updateProduct(ProductDto productDto);
@@ -11,4 +13,6 @@ public interface ProductService {
     ResponseDto<ProductDto> getProductById(String id);
 
     ResponseDto<ProductDto> delete(String id);
+
+    ResponseDto<List<ProductDto>> getAll();
 }
