@@ -4,10 +4,6 @@ create table if not exists users(
                       enabled boolean not null
 );
 
-create table if not exists authorities (
-                             username varchar(50) not null,
-                             authority varchar(50) not null,
-                             constraint fk_authorities_users foreign key(username) references users(username)
-);
-
-create unique index if not exists ix_auth_username on authorities (username,authority);
+INSERT INTO users (username, password, enabled)
+SELECT 'admin', '$2a$12$vNN.gHzJul9MZQGvlzuTOuqpC6Mfx3bXbN9eQ25k/.RrsDDvX9G3C', true
+    WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = 'admin');
