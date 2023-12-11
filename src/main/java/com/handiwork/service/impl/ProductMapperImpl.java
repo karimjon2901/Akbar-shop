@@ -23,7 +23,7 @@ public class ProductMapperImpl extends ProductMapper {
         productDto.setName(translatorMapper.toDto(product.getName()));
         productDto.setPrice(product.getPrice());
         productDto.setStatus(translatorMapper.toDto(product.getStatus()));
-        productDto.setCategory_id(product.getCategory_id().getId());
+        productDto.setCategory_id(product.getCategory().getId());
         productDto.setTags(tagTranslatorMapper.toDto(product.getTags()));
 
         return productDto;
@@ -43,7 +43,7 @@ public class ProductMapperImpl extends ProductMapper {
         product.setAmount(productDto.getAmount());
         product.setPrice(productDto.getPrice());
         product.setProduct_info(translatorMapper.toEntity(productDto.getProduct_info()));
-        product.setCategory_id(categoryRepository.findById(productDto.getCategory_id()).orElse(null));
+        product.setCategory(categoryRepository.findById(productDto.getCategory_id()).orElse(null));
         product.setId(productDto.getId());
         product.setAssessments(productDto.getAssessments());
         product.setTags(tagTranslatorMapper.toEntity(productDto.getTags()));

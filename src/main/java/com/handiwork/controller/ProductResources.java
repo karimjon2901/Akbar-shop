@@ -80,7 +80,7 @@ public class ProductResources {
         return productService.delete(id);
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseDto<List<ProductDto>> getAll(){
         return productService.getAll();
     }

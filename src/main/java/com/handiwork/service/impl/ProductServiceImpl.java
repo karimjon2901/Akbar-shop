@@ -67,7 +67,7 @@ public class ProductServiceImpl implements ProductService {
             product.setName(productDto.getName() != null ? translatorMapper.toEntity(productDto.getName()) : product.getName());
             product.setProduct_info(productDto.getProduct_info() != null ? translatorMapper.toEntity(productDto.getProduct_info()) : product.getProduct_info());
             product.setAmount(productDto.getAmount() != null ? productDto.getAmount() : product.getAmount());
-            product.setCategory_id(productDto.getCategory_id() != null ? categoryRepository.findById(productDto.getId()).get() : product.getCategory_id());
+            product.setCategory(productDto.getCategory_id() != null ? categoryRepository.findById(productDto.getId()).get() : product.getCategory());
             product.setPrice(productDto.getPrice() != null ? productDto.getPrice() : product.getPrice());
 
             productRepository.save(product);

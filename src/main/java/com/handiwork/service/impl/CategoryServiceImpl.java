@@ -3,7 +3,9 @@ package com.handiwork.service.impl;
 import com.handiwork.dto.CategoryDto;
 import com.handiwork.dto.ResponseDto;
 import com.handiwork.entity.Category;
+import com.handiwork.entity.Product;
 import com.handiwork.repository.CategoryRepository;
+import com.handiwork.repository.ProductRepository;
 import com.handiwork.service.CategoryService;
 import com.handiwork.service.IdGenerator;
 import com.handiwork.service.mapper.CategoryMapper;
@@ -23,6 +25,7 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryMapper categoryMapper;
     private final TranslatorMapper translatorMapper;
     private final IdGenerator idGenerator;
+    private final ProductRepository productRepository;
     @Override
     public ResponseDto<CategoryDto> addCategory(CategoryDto categoryDto) {
         try {
@@ -98,7 +101,7 @@ public class CategoryServiceImpl implements CategoryService {
                         .message(NOT_FOUND)
                         .build();
             }
-            categoryRepository.deleteById(id);
+            deleteCategory(id);
             return ResponseDto.<Void>builder()
                     .message(OK)
                     .success(true)
@@ -138,6 +141,15 @@ public class CategoryServiceImpl implements CategoryService {
             return ResponseDto.<CategoryDto>builder()
                     .message(DATABASE_ERROR + " : " + e.getMessage())
                     .build();
+        }
+    }
+    private void deleteCategory(String categoryId) {
+        Category category = categoryRepository.findById(categoryId).orElse(null);
+        if (category != null) {
+            List<Product> products = productRepository.findAllByCategoryId(category.getId());
+            products.forEach(product -> product.setCategory(null));
+            productRepository.saveAll(products);
+            categoryRepository.delete(category);
         }
     }
 }

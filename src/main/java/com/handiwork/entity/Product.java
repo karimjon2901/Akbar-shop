@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedDate;
 import org.w3c.dom.stylesheets.LinkStyle;
 
@@ -28,7 +30,7 @@ public class Product {
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private Translator product_info;
     @ManyToOne
-    private Category category_id;
+    private Category category;
     private Integer assessments;
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private Translator tags;
